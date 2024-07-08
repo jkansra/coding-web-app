@@ -5,22 +5,13 @@ import MonacoHeader from "./MonacoHeader";
 import { CodeContext } from "@/app/utils/CodeContext";
 
 // Monaco code editor component - third party package
-const MonacoEditor = () => {
+const MonacoEditor = ({ editorDefaultCode }) => {
   const editorRef = useRef();
-  const { setCodeData } = useContext(CodeContext);
+  const { setCodeContextData, codeContextData } = useContext(CodeContext);
   const [cursorPosition, setCursorPosition] = useState({
     lineNumber: 1,
     column: 1,
   });
-  // Pending default code changes
-  const defaultCode = `/**
-  * @param {number} a
-  * @param {number} b
-  * @return {number}
-  */
- var getSum = function(a, b) {
-     
- };`;
 
   function handleEditorDidMount(editor, monaco) {
     editorRef.current = editor;
@@ -30,9 +21,9 @@ const MonacoEditor = () => {
     const editorInstance = editorRef.current;
     if (!editorInstance) return;
 
-    setCodeData((prevData) => ({
+    setCodeContextData((prevData) => ({
       ...prevData,
-      code: editorInstance.getValue(),
+      userSubmittedCode: editorInstance.getValue(),
     }));
 
     // Listen to the onDidChangeCursorPosition event
@@ -49,28 +40,47 @@ const MonacoEditor = () => {
     const editorInstance = editorRef.current;
     if (!editorInstance) return;
 
-    editorInstance.setValue(defaultCode);
+    editorInstance.setValue(codeContextData.defaultCode);
   };
 
-  const formatCode = () => {
-    editorRef.current["_actions"]
-      ?.get("editor.action.formatDocument")
-      ["_run"]();
-  };
+  const formatCode = async () => {
+    const editor = editorRef.current;
+    const model = editor.getModel();
+    if (model) {
+      // Get the action to format the document
+      const action = editor.getAction("editor.action.formatDocument");
+      if (action) {
+        // Run the format action
+        await action.run();
 
+        // Retrieve formatted code
+        const formattedCode = model.getValue();
+
+        // Update the editor with the formatted code
+        editor.setValue(formattedCode);
+        setCodeContextData((prevData) => ({
+          ...prevData,
+          defaultCode: editor.getValue(),
+        }));
+      }
+    }
+  };
   return (
-    <div className="w-1/2 bg-neutral-800 rounded-lg border border-gray-100 border-opacity-10">
-      <MonacoHeader formatCode={formatCode} resetCode={resetCode} />
+    <>
+      <MonacoHeader
+        formatCode={formatCode}
+        resetCode={resetCode}
+        languageListData={editorDefaultCode}
+      />
 
       {/* Editor component */}
       <Editor
-        height="76vh"
-        defaultLanguage="javascript"
-        defaultValue={defaultCode}
+        height="35vh"
+        language={codeContextData.languageName}
+        value={codeContextData.defaultCode?.replace(/\\n/g, "\n")}
         onMount={handleEditorDidMount}
         onChange={getLineAndColumn}
         theme="vs-dark"
-        className="p-1"
       />
 
       <footer className="text-label-2 dark:text-dark-label-2 text-xs p-3 text-right">
@@ -78,7 +88,7 @@ const MonacoEditor = () => {
           Ln {cursorPosition?.lineNumber}, Col {cursorPosition?.column}
         </p>
       </footer>
-    </div>
+    </>
   );
 };
 

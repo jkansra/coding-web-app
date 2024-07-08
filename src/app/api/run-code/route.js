@@ -1,3 +1,4 @@
+import { languageFileName } from "@/app/utils/constants";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
@@ -11,13 +12,12 @@ export async function POST(req) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        files: [{ name: "main.c", content: code }],
+        files: [{ name: languageFileName[language], content: code }],
       }),
     };
-    console.log(language, "in route");
 
     const response = await fetch(
-      `https://glot.io/api/run/${language?.toLowerCase()}/latest`,
+      `https://glot.io/api/run/${language}/latest`,
       requestOptions
     );
     const data = await response.json();

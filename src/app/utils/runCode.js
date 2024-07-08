@@ -13,7 +13,7 @@ const runCode = async (req) => {
     }
 
     const data = await response.json();
-    console.log("Output: ", data);
+    return data;
   } catch (error) {
     console.error("Error posting data:", error);
   }

@@ -12,7 +12,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={inter.className + " bg-black text-white overflow-y-hidden"}
+        className={
+          inter.className + " bg-black text-white overflow-y-hidden p-2"
+        }
       >
         {children}
       </body>

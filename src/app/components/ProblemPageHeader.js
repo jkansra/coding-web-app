@@ -7,21 +7,48 @@ import runCode from "../utils/runCode";
 {
   /* Logo and Buttons */
 }
-const ProblemPageHeader = () => {
-  const { codeData } = useContext(CodeContext);
-  console.log(codeData, "in App header");
+const ProblemPageHeader = ({ testCasesData }) => {
+  const { codeContextData, setCodeContextData } = useContext(CodeContext);
 
-  const handleRunCode = () => {
-    const { isLoading, isError, error, codeOutput } = runCode({
-      language: codeData.language,
-      code: codeData.code,
-    });
-    console.log(codeOutput);
+  const handleRunCode = async () => {
+    try {
+      const runCodeResponse = await runCode({
+        language: codeContextData.languageName,
+        code: codeContextData.userSubmittedCode,
+      });
+      setCodeContextData((prevData) => ({
+        ...prevData,
+        codeOutput: runCodeResponse,
+      }));
+    } catch (error) {
+      console.error("Error running code:", error);
+    }
+  };
+
+  const handleRunTestCases = async () => {
+    try {
+      const currentCode = codeContextData.userSubmittedCode;
+      const codeWithTestCases =
+        currentCode +
+        testCasesData[0].testCases[0] +
+        testCasesData[0].testCases[1] +
+        testCasesData[0].testCases[2];
+      const runCodeResponse = await runCode({
+        language: codeContextData.languageName,
+        code: codeWithTestCases,
+      });
+      setCodeContextData((prevData) => ({
+        ...prevData,
+        codeOutput: runCodeResponse,
+      }));
+    } catch (error) {
+      console.error("Error running code:", error);
+    }
   };
 
   return (
     <nav>
-      <div className="flex flex-wrap items-center justify-between p-2">
+      <div className="flex flex-wrap items-center justify-between mb-2">
         <div className="flex gap-2">
           <Link href="/" className="flex items-center">
             <img
@@ -62,7 +89,7 @@ const ProblemPageHeader = () => {
           <button
             type="button"
             className="inline-flex items-center py-1 px-2 text-sm font-medium text-gray-900 rounded hover:bg-gray-100 focus:z-10 focus:ring-2 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:text-white bg-gray-800"
-            onClick={() => handleRunCode()}
+            onClick={handleRunCode}
           >
             <svg
               className="w-6 h-6 text-gray-400 mr-1"
@@ -81,6 +108,30 @@ const ProblemPageHeader = () => {
             </svg>
             Run
           </button>
+
+          <button
+            type="button"
+            className="inline-flex items-center py-1 px-2 text-sm font-medium text-gray-900 rounded hover:bg-gray-100 focus:z-10 focus:ring-2 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:text-white bg-gray-800"
+            onClick={handleRunTestCases}
+          >
+            <svg
+              className="w-6 h-6 text-gray-400 mr-1"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fillRule="evenodd"
+                d="M8.6 5.2A1 1 0 0 0 7 6v12a1 1 0 0 0 1.6.8l8-6a1 1 0 0 0 0-1.6l-8-6Z"
+                clipRule="evenodd"
+              />
+            </svg>
+            Run Test Cases
+          </button>
+
           <button
             type="button"
             className="inline-flex items-center py-1 px-2 text-sm font-medium text-green-500 hover:text-green-400 rounded hover:bg-gray-100 focus:z-10 focus:ring-2 dark:hover:bg-gray-700 bg-gray-800 ml-0.5"

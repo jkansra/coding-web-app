@@ -7,13 +7,22 @@ const CodeContext = createContext();
 // Provider component
 const CodeProvider = ({ children }) => {
   // state
-  const [codeData, setCodeData] = useState({
-    language: "Python",
-    code: "",
+  const [codeContextData, setCodeContextData] = useState({
+    languageName: "javascript",
+    defaultCode: `/**
+    * @param {number[]} nums
+    * @param {number} target
+    * @return {number[]}
+    */
+   var functionName = function(nums, target) {
+       
+   };`,
+    userSubmittedCode: "",
+    codeOutput: "",
   });
 
   return (
-    <CodeContext.Provider value={{ codeData, setCodeData }}>
+    <CodeContext.Provider value={{ codeContextData, setCodeContextData }}>
       {children}
     </CodeContext.Provider>
   );

@@ -8,13 +8,27 @@ export async function GET() {
   const client = new MongoClient(uri);
 
   try {
+    await client.connect(); // Connect to MongoDB
+
     const database = client.db("coding-app");
-    const problems = database.collection("problems");
+    const problemsCollection = database.collection("problems");
 
-    // Fetch all problems
-    const problem = await problems.find({}).toArray();
+    // Fetch only title and difficulty fields
+    const problems = await problemsCollection
+      .find(
+        {},
+        {
+          projection: {
+            "description.title": 1,
+            difficulty: 1,
+            _id: 1,
+            route: 1,
+          },
+        }
+      )
+      .toArray();
 
-    return NextResponse.json(problem);
+    return NextResponse.json(problems);
   } finally {
     // Ensures that the client will close when you finish/error
     await client.close();

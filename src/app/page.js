@@ -3,7 +3,7 @@ import Link from "next/link";
 import AppHeader from "./components/AppHeader";
 import fetchData from "./utils/fetchData";
 
-export default function ServerComponentsLayout() {
+export default function LandingPage() {
   // query for all problems
   const API_URL = process.env.API_URL;
   const problemsList = React.use(
@@ -19,11 +19,8 @@ export default function ServerComponentsLayout() {
         <ol className="text-sm flex-none overflow-auto list-decimal list-inside">
           {problemsList?.map((problem) => (
             <li className="pb-6" key={problem._id}>
-              <Link
-                href={`/${problem?.title?.split(" ").join("")}`}
-                prefetch={false}
-              >
-                {problem.title}
+              <Link href={`/${problem?.route}`}>
+                {problem.description.title}
               </Link>
             </li>
           ))}

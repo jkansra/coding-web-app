@@ -1,35 +1,28 @@
 import React, { useContext, useState } from "react";
-import useLanguageListData from "@/app/utils/useLanguageListData";
 import { CodeContext } from "@/app/utils/CodeContext";
 
 // Monaco header component consist of language dropdown along with
 // format and reset action buttons
-const MonacoHeader = ({ formatCode, resetCode }) => {
-  const { isLoading, isError, error, languageListData } = useLanguageListData();
+const MonacoHeader = ({ formatCode, resetCode, languageListData }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { codeData, setCodeData } = useContext(CodeContext);
-  const [selectedLanguage, setSelectedLanguage] = useState(codeData.language);
+  const [selectedLanguage, setSelectedLanguage] = useState("JavaScript");
+
+  const { setCodeContextData } = useContext(CodeContext);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
   const selectLanguage = (language) => {
-    setSelectedLanguage(language);
-    setIsOpen(false); // Close dropdown after selection
-    setCodeData((prevData) => ({
+    setSelectedLanguage(language.displayName);
+    setIsOpen(false);
+
+    setCodeContextData((prevData) => ({
       ...prevData,
-      language: language,
+      languageName: language.name,
+      defaultCode: language.defaultCode,
     }));
   };
-
-  if (isLoading) {
-    return <p className="text-center">Loading</p>;
-  }
-
-  if (isError) {
-    return <h1 className="no-data">{error?.message || "No Language Data"}</h1>;
-  }
 
   return (
     <>
@@ -90,11 +83,11 @@ const MonacoHeader = ({ formatCode, resetCode }) => {
             <div className="origin-top-right absolute left-0 mt-1 z-50 shadow-lg bg-neutral-800 rounded-md border border-gray-100 border-opacity-10 w-36 overflow-y-auto h-48">
               {languageListData?.map((language) => (
                 <button
-                  onClick={() => selectLanguage(language?.name)}
+                  onClick={() => selectLanguage(language)}
                   key={language?.name}
                   className="block px-2 py-1.5 text-sm dark:text-gray-300 dark:hover:bg-neutral-600 w-full text-left"
                 >
-                  {language?.name}
+                  {language?.displayName}
                 </button>
               ))}
             </div>
