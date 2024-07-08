@@ -8,13 +8,16 @@ import runCode from "../utils/runCode";
   /* Logo and Buttons */
 }
 const ProblemPageHeader = ({ testCasesData }) => {
-  const { codeContextData, setCodeContextData } = useContext(CodeContext);
+  const {
+    codeContextData: { languageName, userSubmittedCode },
+    setCodeContextData,
+  } = useContext(CodeContext);
 
   const handleRunCode = async () => {
     try {
       const runCodeResponse = await runCode({
-        language: codeContextData.languageName,
-        code: codeContextData.userSubmittedCode,
+        language: languageName,
+        code: userSubmittedCode,
       });
       setCodeContextData((prevData) => ({
         ...prevData,
@@ -27,14 +30,12 @@ const ProblemPageHeader = ({ testCasesData }) => {
 
   const handleRunTestCases = async () => {
     try {
-      const currentCode = codeContextData.userSubmittedCode;
-      const codeWithTestCases =
-        currentCode +
-        testCasesData[0].testCases[0] +
-        testCasesData[0].testCases[1] +
-        testCasesData[0].testCases[2];
+      const testCases = testCasesData[languageName]
+        ?.map((languageTestCase) => languageTestCase.testCase)
+        .join("\n");
+      const codeWithTestCases = userSubmittedCode + testCases;
       const runCodeResponse = await runCode({
-        language: codeContextData.languageName,
+        language: languageName,
         code: codeWithTestCases,
       });
       setCodeContextData((prevData) => ({

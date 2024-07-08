@@ -9,17 +9,15 @@ import OutputComponent from "../components/OutputComponent";
 export default function ProblemPage({ params }) {
   const { problemTitle } = params;
   const API_URL = process.env.API_URL;
-  const { description, editorDefaultCode, testCases } = React.use(
+  const { description, editorDefaultCode, testCasesData } = React.use(
     fetchData(`${API_URL}/api/problems-list/${problemTitle}`, {
       cache: "no-store",
     })
   );
 
-  console.log(testCases, "in problem page");
-
   return (
     <CodeProvider>
-      <ProblemPageHeader testCasesData={testCases} />
+      <ProblemPageHeader testCasesData={testCasesData} />
       {/* <p>{problemTitle}</p> */}
       <div className="flex justify-between gap-1">
         <div className="w-1/2 bg-neutral-800 rounded-lg border border-gray-100 border-opacity-10">
