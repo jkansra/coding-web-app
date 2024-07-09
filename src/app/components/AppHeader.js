@@ -1,8 +1,6 @@
-"use client";
-import React, { useContext } from "react";
+import React from "react";
 import Link from "next/link";
-import { CodeContext } from "../utils/CodeContext";
-import runCode from "../utils/runCode";
+import Image from "next/image";
 
 {
   /* Logo and Buttons */
@@ -10,11 +8,12 @@ import runCode from "../utils/runCode";
 const AppHeader = () => {
   return (
     <nav>
-      <div className="flex flex-wrap items-center justify-start p-2 gap-2">
+      <div className="flex flex-wrap items-center justify-start gap-2">
         <Link href="/" className="flex items-center">
-          <img
+          <Image
             src="https://leetcode.com/_next/static/images/logo-dark-c96c407d175e36c81e236fcfdd682a0b.png"
-            className="h-5"
+            width={17}
+            height={20}
             alt="Company logo"
           />
         </Link>

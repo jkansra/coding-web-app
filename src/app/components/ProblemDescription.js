@@ -41,32 +41,32 @@ const ProblemDescription = ({ descriptionData }) => {
           </div>
 
           {examples?.map((example) => (
-            <div className="mb-6">
-              <h2 className="text-sm font-semibold mb-2">{example.title}</h2>
+            <div className="mb-6" key={example?.title}>
+              <h2 className="text-sm font-semibold mb-2">{example?.title}</h2>
               <div className="flex">
                 <div className="w-1/2 mr-4">
                   <h3 className="text-sm font-semibold mb-1">Input:</h3>
                   <pre className="text-sm bg-gray-800 rounded p-2">
                     {/* nums = [2, 7, 11, 15], target = 9 */}
-                    {example.input}
+                    {example?.input}
                   </pre>
                 </div>
                 <div className="w-1/2">
                   <h3 className="text-sm font-semibold mb-1">Output:</h3>
                   <pre className="text-sm bg-gray-800 rounded p-2">
-                    {example.output}
+                    {example?.output}
                   </pre>
                 </div>
               </div>
-              <p className="text-sm mt-2">{example.explanation}</p>
+              <p className="text-sm mt-2">{example?.explanation}</p>
             </div>
           ))}
 
           <div className="mb-6">
             <h2 className="text-sm font-semibold mb-2">Constraints</h2>
             <ul className="list-disc list-inside text-sm">
-              {constraints?.map((constraint) => (
-                <li>{constraint}</li>
+              {constraints?.map((constraint, index) => (
+                <li key={index}>{constraint}</li>
               ))}
             </ul>
           </div>
