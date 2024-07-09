@@ -1,3 +1,4 @@
+"use Client";
 import React, { useContext, useState } from "react";
 import { CodeContext } from "@/app/utils/CodeContext";
 

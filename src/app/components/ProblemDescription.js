@@ -5,7 +5,7 @@ import React from "react";
 const ProblemDescription = ({ descriptionData }) => {
   const { title, content, examples, constraints } = descriptionData;
   return (
-    <>
+    <div className="w-1/2 bg-neutral-800 rounded-lg border border-gray-100 border-opacity-10 h-full">
       <header className="p-2 text-sm flex">
         <svg
           className="w-5 h-5 text-cyan-500 mr-1"
@@ -76,7 +76,7 @@ const ProblemDescription = ({ descriptionData }) => {
       <footer className="text-label-2 text-xs p-3">
         <p>Copyright ©️ 2024 CodingApp All rights reserved</p>
       </footer>
-    </>
+    </div>
   );
 };
 

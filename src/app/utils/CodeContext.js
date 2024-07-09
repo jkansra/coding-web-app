@@ -19,6 +19,7 @@ const CodeProvider = ({ children }) => {
    };`,
     userSubmittedCode: "",
     codeOutput: "",
+    testCasesResult: [],
   });
 
   return (

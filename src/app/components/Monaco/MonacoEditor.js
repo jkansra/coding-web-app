@@ -66,7 +66,7 @@ const MonacoEditor = ({ editorDefaultCode }) => {
     }
   };
   return (
-    <>
+    <div className="bg-neutral-800 rounded-lg border border-gray-100 border-opacity-10 flex-grow h-[40vh]">
       <MonacoHeader
         formatCode={formatCode}
         resetCode={resetCode}
@@ -75,7 +75,7 @@ const MonacoEditor = ({ editorDefaultCode }) => {
 
       {/* Editor component */}
       <Editor
-        height="35vh"
+        height="40vh"
         language={codeContextData.languageName}
         value={codeContextData.defaultCode?.replace(/\\n/g, "\n")}
         onMount={handleEditorDidMount}
@@ -88,7 +88,7 @@ const MonacoEditor = ({ editorDefaultCode }) => {
           Ln {cursorPosition?.lineNumber}, Col {cursorPosition?.column}
         </p>
       </footer>
-    </>
+    </div>
   );
 };
 

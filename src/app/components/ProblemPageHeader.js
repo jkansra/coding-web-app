@@ -4,6 +4,7 @@ import Link from "next/link";
 import { CodeContext } from "../utils/CodeContext";
 import runCode from "../utils/runCode";
 import Image from "next/image";
+import compareOutputs from "../utils/compareOutputs";
 
 {
   /* Logo and Buttons */
@@ -23,6 +24,7 @@ const ProblemPageHeader = ({ testCasesData }) => {
       setCodeContextData((prevData) => ({
         ...prevData,
         codeOutput: runCodeResponse,
+        testCasesResult: [],
       }));
     } catch (error) {
       console.error("Error running code:", error);
@@ -34,14 +36,23 @@ const ProblemPageHeader = ({ testCasesData }) => {
       const testCases = testCasesData[languageName]
         ?.map((languageTestCase) => languageTestCase.testCase)
         .join("\n");
+      const expectedOutput = testCasesData[languageName]
+        ?.map((languageTestCase) => languageTestCase.expectedOutput)
+        .join("\n");
       const codeWithTestCases = userSubmittedCode + testCases;
       const runCodeResponse = await runCode({
         language: languageName,
         code: codeWithTestCases,
       });
+      const testCasesResult = compareOutputs(
+        runCodeResponse?.stdout,
+        expectedOutput
+      );
+      console.log(testCasesResult);
       setCodeContextData((prevData) => ({
         ...prevData,
         codeOutput: runCodeResponse,
+        testCasesResult: testCasesResult,
       }));
     } catch (error) {
       console.error("Error running code:", error);
