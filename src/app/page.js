@@ -18,11 +18,8 @@ export default function LandingPage() {
       <div className="mx-auto my-8 w-1/2 h-[40vh] overflow-y-auto bg-neutral-900 p-4 rounded-xl border border-gray-100 border-opacity-10">
         <ol className="text-sm flex-none overflow-auto list-decimal list-inside">
           {problemsList?.map((problem, index) => (
-            <Link href={`/${problem?.route}`}>
-              <li
-                className="p-4 flex justify-between items-center hover:bg-neutral-800"
-                key={problem._id}
-              >
+            <Link href={`/${problem?.route}`} key={problem._id}>
+              <li className="p-4 flex justify-between items-center hover:bg-neutral-800">
                 <span>
                   {index + 1}. {problem.description.title}
                 </span>
