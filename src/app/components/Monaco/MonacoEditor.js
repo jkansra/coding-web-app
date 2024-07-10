@@ -40,30 +40,12 @@ const MonacoEditor = ({ editorDefaultCode }) => {
     const editorInstance = editorRef.current;
     if (!editorInstance) return;
 
-    editorInstance.setValue(codeContextData.defaultCode);
+    editorInstance.setValue(codeContextData.defaultCode?.replace(/\\n/g, "\n"));
   };
 
   const formatCode = async () => {
-    const editor = editorRef.current;
-    const model = editor.getModel();
-    if (model) {
-      // Get the action to format the document
-      const action = editor.getAction("editor.action.formatDocument");
-      if (action) {
-        // Run the format action
-        await action.run();
-
-        // Retrieve formatted code
-        const formattedCode = model.getValue();
-
-        // Update the editor with the formatted code
-        editor.setValue(formattedCode);
-        setCodeContextData((prevData) => ({
-          ...prevData,
-          defaultCode: editor.getValue(),
-        }));
-      }
-    }
+    // Todo
+    return;
   };
   return (
     <div className="bg-neutral-800 rounded-lg border border-gray-100 border-opacity-10 flex-grow h-[40vh]">

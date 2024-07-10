@@ -4,7 +4,10 @@ import Link from "next/link";
 import { CodeContext } from "../utils/CodeContext";
 import runCode from "../utils/runCode";
 import Image from "next/image";
-import compareOutputs from "../utils/compareOutputs";
+import {
+  compareOutputs,
+  updateCodeWithTestCases,
+} from "../utils/helperFunctions";
 
 {
   /* Logo and Buttons */
@@ -36,10 +39,16 @@ const ProblemPageHeader = ({ testCasesData }) => {
       const testCases = testCasesData[languageName]
         ?.map((languageTestCase) => languageTestCase.testCase)
         .join("\n");
+
       const expectedOutput = testCasesData[languageName]
         ?.map((languageTestCase) => languageTestCase.expectedOutput)
         .join("\n");
-      const codeWithTestCases = userSubmittedCode + testCases;
+
+      const codeWithTestCases = updateCodeWithTestCases(
+        languageName,
+        userSubmittedCode,
+        testCases
+      );
       const runCodeResponse = await runCode({
         language: languageName,
         code: codeWithTestCases,
@@ -99,7 +108,7 @@ const ProblemPageHeader = ({ testCasesData }) => {
 
         {/* Run and Submit buttons will be rendered on the problem page */}
 
-        <div className="rounded-md shadow-sm" role="group">
+        <div className="rounded-md shadow-sm flex gap-1" role="group">
           <button
             type="button"
             className="inline-flex items-center py-1 px-2 text-sm font-medium text-gray-900 rounded hover:bg-gray-100 focus:z-10 focus:ring-2 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:text-white bg-gray-800"
@@ -125,22 +134,24 @@ const ProblemPageHeader = ({ testCasesData }) => {
 
           <button
             type="button"
-            className="inline-flex items-center py-1 px-2 text-sm font-medium text-gray-900 rounded hover:bg-gray-100 focus:z-10 focus:ring-2 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:text-white bg-gray-800"
+            className="inline-flex items-center py-1 px-2 text-sm font-medium rounded hover:bg-gray-100 focus:z-10 focus:ring-2 text-amber-500 dark:hover:bg-gray-700 dark:focus:text-white bg-gray-800"
             onClick={handleRunTestCases}
           >
             <svg
-              className="w-6 h-6 text-gray-400 mr-1"
+              className="w-6 h-6 mr-2"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               width="24"
               height="24"
-              fill="currentColor"
+              fill="none"
               viewBox="0 0 24 24"
             >
               <path
-                fillRule="evenodd"
-                d="M8.6 5.2A1 1 0 0 0 7 6v12a1 1 0 0 0 1.6.8l8-6a1 1 0 0 0 0-1.6l-8-6Z"
-                clipRule="evenodd"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M19 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1Zm0 0-4 4m5 0H4m1 0 4-4m1 4 4-4m-4 7v6l4-3-4-3Z"
               />
             </svg>
             Run Test Cases
@@ -148,10 +159,10 @@ const ProblemPageHeader = ({ testCasesData }) => {
 
           <button
             type="button"
-            className="inline-flex items-center py-1 px-2 text-sm font-medium text-green-500 hover:text-green-400 rounded hover:bg-gray-100 focus:z-10 focus:ring-2 dark:hover:bg-gray-700 bg-gray-800 ml-0.5"
+            className="inline-flex items-center py-1 px-2 text-sm font-medium text-green-500 hover:text-green-400 rounded hover:bg-gray-100 focus:z-10 focus:ring-2 dark:hover:bg-gray-700 bg-gray-800"
           >
             <svg
-              className="w-6 h-6 mr-1"
+              className="w-6 h-6 mr-2"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               width="24"

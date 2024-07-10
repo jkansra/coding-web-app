@@ -15,14 +15,20 @@ export default function LandingPage() {
   return (
     <>
       <AppHeader />
-      <div className="flex flex-1 min-h-0 py-8">
+      <div className="mx-auto my-8 w-1/2 h-[40vh] overflow-y-auto bg-neutral-900 p-4 rounded-xl border border-gray-100 border-opacity-10">
         <ol className="text-sm flex-none overflow-auto list-decimal list-inside">
-          {problemsList?.map((problem) => (
-            <li className="pb-6" key={problem._id}>
-              <Link href={`/${problem?.route}`}>
-                {problem.description.title}
-              </Link>
-            </li>
+          {problemsList?.map((problem, index) => (
+            <Link href={`/${problem?.route}`}>
+              <li
+                className="p-4 flex justify-between items-center hover:bg-neutral-800"
+                key={problem._id}
+              >
+                <span>
+                  {index + 1}. {problem.description.title}
+                </span>
+                <span className="text-cyan-500">{problem.difficulty}</span>
+              </li>
+            </Link>
           ))}
         </ol>
       </div>
