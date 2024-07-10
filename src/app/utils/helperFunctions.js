@@ -61,33 +61,38 @@ export const updateCodeWithTestCases = (
   userSubmittedCode,
   testCases
 ) => {
-  if (languageName === "java") {
-    return insertStringBeforeLast(
-      userSubmittedCode,
-      "}",
-      `public static void main(String[] args) { ${testCases} }`
-    );
-  } else if (languageName === "c") {
-    return insertStringBeforeLast(
-      userSubmittedCode,
-      "}",
-      `int main() { ${testCases?.replace(/\\/g, "")} return 0; }`
-    );
-  } else if (languageName === "cpp") {
-    return `${userSubmittedCode} int main() { ${testCases} return 0; }`;
-  } else if (languageName === "php") {
-    return insertStringBeforeLast(userSubmittedCode, "?>", testCases);
-  } else if (languageName === "go") {
-    return `${userSubmittedCode} func main() { ${testCases} }`;
-  } else if (languageName === "kotlin") {
-    return `${userSubmittedCode} fun main() { ${testCases} }`;
-  } else if (languageName === "csharp") {
-    return insertStringBeforeLast(
-      userSubmittedCode,
-      "}",
-      `public static void Main(String[] args) { ${testCases} }`
-    );
-  } else {
-    return userSubmittedCode + testCases;
+  switch (languageName) {
+    case "java":
+      return insertStringBeforeLast(
+        userSubmittedCode,
+        "}",
+        `public static void main(String[] args) { ${testCases} }`
+      );
+    case "c":
+      return insertStringBeforeLast(
+        userSubmittedCode,
+        "}",
+        `int main() { ${testCases?.replace(/\\/g, "")} return 0; }`
+      );
+    case "cpp":
+      return `${userSubmittedCode} 
+      int main() { ${testCases} return 0; }`;
+    case "php":
+      return insertStringBeforeLast(userSubmittedCode, "?>", testCases);
+    case "go":
+      return `${userSubmittedCode} 
+      func main() { ${testCases} }`;
+    case "kotlin":
+      return `${userSubmittedCode} 
+      fun main() { ${testCases} }`;
+    case "csharp":
+      return insertStringBeforeLast(
+        userSubmittedCode,
+        "}",
+        `public static void Main(String[] args) { ${testCases} }`
+      );
+    default:
+      return `${userSubmittedCode}
+      ${testCases}`;
   }
 };
